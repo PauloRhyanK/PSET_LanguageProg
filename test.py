@@ -95,6 +95,30 @@ class TestInvertida(unittest.TestCase):
 
 # Classe para os testes dos filtros:
 class TestFiltros(unittest.TestCase):
+
+
+    def test_filtroKernel(self):
+        im = pset1.Imagem.carregar('test_images/pigbird.png')
+        arquivo_saida = os.path.join(TEST_DIRECTORY, 'test_results', 'pigbirdKernel.png')
+
+        kernel =[
+        [0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [1, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0]]
+        resultado = im.correlacao(kernel)
+
+        resultado.salvar(arquivo_saida)
+
+        
+
+
+
     def test_borrada(self):
         for tamanho_kernel in (1, 3, 7):
             for nome_arquivo in ('mushroom', 'twocats', 'chess'):

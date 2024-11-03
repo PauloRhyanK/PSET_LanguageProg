@@ -34,7 +34,19 @@ class Imagem:
         self.pixels = pixels
 
     def get_pixel(self, x, y):
-        return self.pixels[y * self.largura + x] # Ele quer uma indice unidemensional. 
+        # Aqui estamos tratando os pixels que estão fora da imagem, usando a versão estendida.
+        if x < 0:
+            x = 0
+        elif x >= self.largura:
+            x = self.largura - 1
+        
+        if y < 0:
+            y = 0
+        elif y >= self.altura:
+            y = self.altura - 1 
+
+        return self.pixels[y * self.largura + x] # Ele quer uma indice unidemensional.
+    
 
     def set_pixel(self, x, y, c):
         self.pixels[y * self.largura + x] = c # Ele selecione o pixel de acordo com o indice fornecido e seta com o valor c fornecido.
@@ -50,6 +62,43 @@ class Imagem:
 
     def invertida(self):
         return self.aplicar_por_pixel(lambda c: 255 - c) # 256 => 255
+    
+
+    # Verificando se o valor dos pixels no de imagens ultrapassa os limites.
+    def verificar_pixels(self):
+        for x in range(self.largura):
+            for y in range(self.altura):
+                pixel = self.get_pixel(x,y) # Pegando o pixel
+
+                # Verificando o pixel
+                if pixel > 255: 
+                    pixel = 255
+                elif pixel < 0:
+                    pixel = 0
+                if isinstance(pixel, float):
+                    pixel = round(self)
+
+                #Alterando o pixel dentro do limite
+                self.set_pixel(x,y, pixel)
+
+    def correlacao(self, filtro):
+        resultado = Imagem.nova(self.largura, self.altura)
+        pontocentral = len(filtro) // 2
+
+        for x in range(self.largura):
+            for y in range(self.altura):
+                soma = 0
+                for i in range(len(filtro)):
+                    for j in range(len(filtro)):
+                        ix = x + i - pontocentral
+                        jy = y + j - pontocentral
+                        soma += self.get_pixel(ix, jy) * filtro[i][j]
+                    
+                resultado.set_pixel(x,y, soma)
+
+        self.verificar_pixels()
+        return resultado
+        
 
     def borrada(self, n):
         raise NotImplementedError
