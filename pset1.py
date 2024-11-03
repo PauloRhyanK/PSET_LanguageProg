@@ -52,6 +52,7 @@ class Imagem:
         self.pixels[y * self.largura + x] = c # Ele selecione o pixel de acordo com o indice fornecido e seta com o valor c fornecido.
 
     def aplicar_por_pixel(self, func):
+        # Aqui alteramos ordem errada, tiramos declarações desncesessárias e aplicarmos a função correta.
         resultado = Imagem.nova(self.largura, self.altura)
         for x in range(resultado.largura):
             for y in range(resultado.altura):
@@ -68,43 +69,66 @@ class Imagem:
     def verificar_pixels(self):
         for x in range(self.largura):
             for y in range(self.altura):
-                pixel = self.get_pixel(x,y) # Pegando o pixel
+                pixel = self.get_pixel(x, y)  # Pegando o pixel
 
                 # Verificando o pixel
-                if pixel > 255: 
+                if pixel > 255:
                     pixel = 255
                 elif pixel < 0:
                     pixel = 0
                 if isinstance(pixel, float):
-                    pixel = round(self)
+                    pixel = round(pixel)  # Corrigido para arredondar o valor do pixel
 
-                #Alterando o pixel dentro do limite
-                self.set_pixel(x,y, pixel)
+                # Alterando o pixel dentro do limite
+                self.set_pixel(x, y, pixel)
 
     def correlacao(self, filtro):
         resultado = Imagem.nova(self.largura, self.altura)
-        pontocentral = len(filtro) // 2
+        pontocentral = len(filtro) // 2 # Criando o ponto central que sera usado para achar os elementos adjacentes
+
+        # Percorrendo a imagem
+        for x in range(self.largura): 
+            for y in range(self.altura):
+                soma = 0 # Variavel que vai armazenar o novo valor no pixel
+
+                # Percorrendo o kernel
+                for i in range(len(filtro)):
+                    for j in range(len(filtro)):
+                        # Pegando o pixel adjacente
+                        ix = x + i - pontocentral
+                        jy = y + j - pontocentral
+
+                        # Somando o pixel adjacente com o pixel do kernel
+                        soma += self.get_pixel(ix, jy) * filtro[i][j]
+
+                # Aqui estamos aplicando o novo valor do pixel na imagem    
+                resultado.set_pixel(x,y, soma)
+
+        
+
+        return resultado
+    
+    def kernel_borrada(self, n):
+        valor = 1 / (n * n) # Calculando o valor do kernel e garantindo que a soma dos elementos seja 1
+        kernel = [[valor for _ in range(n)] for _ in range(n)]  # Criando o kernel de largura e altura n
+        return kernel
+
+    def borrada(self, n):
+        # Aplicando a correlação com o kernel borrada, a função de tratar limite ja esta aplciada em correlação
+        resultado = self.correlacao(self.kernel_borrada(n))  # n define a intensidade do filtro
+        resultado.verificar_pixels()  # Verificando se o valor dos pixels no de imagens ultrapassa os limites
+        return resultado
+
+    def focada(self, n):
+        imgBorrada = self.borrada(n) # Criando versão borrada da imagem
 
         for x in range(self.largura):
             for y in range(self.altura):
-                soma = 0
-                for i in range(len(filtro)):
-                    for j in range(len(filtro)):
-                        ix = x + i - pontocentral
-                        jy = y + j - pontocentral
-                        soma += self.get_pixel(ix, jy) * filtro[i][j]
-                    
-                resultado.set_pixel(x,y, soma)
+                nPixel = (self.get_pixel(x,y) * 2) - imgBorrada.get_pixel(x,y)
+                self.set_pixel(x,y, nPixel)
 
-        self.verificar_pixels()
-        return resultado
-        
-
-    def borrada(self, n):
-        raise NotImplementedError
-
-    def focada(self, n):
-        raise NotImplementedError
+        self.verificar_pixels() # Verificando se o valor dos pixels no de imagens ultrapassa os limites
+        return self
 
     def bordas(self):
         raise NotImplementedError
@@ -201,7 +225,7 @@ class Imagem:
         WINDOWS_OPENED = True
         toplevel = tkinter.Toplevel()
         # O highlightthickness=0 é um hack para evitar que o redimensionamento da janela
-        # dispare outro evento de redimensionamento (causando um loop infinito de
+        # dispare outro evento de redimensionamento (causing um loop infinito de
         # redimensionamento). Para maiores informações, ver:
         # https://stackoverflow.com/questions/22838255/tkinter-canvas-resizing-automatically
         tela = tkinter.Canvas(toplevel, height=self.altura,

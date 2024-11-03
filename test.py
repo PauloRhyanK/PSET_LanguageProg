@@ -117,7 +117,15 @@ class TestFiltros(unittest.TestCase):
 
         
 
+    def test_borrada_cat(self):
+        arquivo_entrada = os.path.join(TEST_DIRECTORY, 'test_images', 'cat.png')  # Caminho do gato
+        arquivo_saida = os.path.join(TEST_DIRECTORY, 'test_results', 'catblur.png')  # Caminho do resultado do gato borrado
 
+        imagem = pset1.Imagem.carregar(arquivo_entrada)
+        resultado = imagem.borrada(4) # Borrando o gato
+        resultado.salvar(arquivo_saida)
+
+        
 
     def test_borrada(self):
         for tamanho_kernel in (1, 3, 7):
@@ -134,6 +142,18 @@ class TestFiltros(unittest.TestCase):
                     self.assertEqual(imagem_entrada, imagem_entrada_copia,
                                      "Cuidado para não modificar a imagem original!")
                     self.assertEqual(resultado,  esperado)
+
+    def test_nitidez(self):
+        arquivo_entrada = os.path.join(TEST_DIRECTORY, 'test_images', 'python.png') 
+        arquivo_saida = os.path.join(TEST_DIRECTORY, 'test_results', 'pythonNitido.png') 
+
+        img = pset1.Imagem.carregar(arquivo_entrada)
+        resultado = img.focada(11) 
+        resultado.salvar(arquivo_saida)
+
+
+        
+
 
     def test_focada(self):
         for tamanho_kernel in (1, 3, 9):

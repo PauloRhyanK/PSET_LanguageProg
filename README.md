@@ -31,6 +31,7 @@ Foram alteradas as fuções, conforme comentada no código:**
 Inversão da imagem:
 
 <img src="test_images/bluegill.png" alt="Imagem Normal" width="200"/>
+=>
 <img src="test_results/bluegill_invertida.png" alt="Imagem invertida" width="200"/>
 
 ## Questão 3:
@@ -117,4 +118,64 @@ Teste da imagem com o kernel
 
 Aplicação do kernel </br>
 <img src="./test_images/pigbird.png" alt="Imagem com kernel aplicado" width="200">
+=>
 <img src="./test_results/pigbirdKernel.png" alt="Imagem com kernel aplicado" width="200">
+
+## Questão 5:
+**se quisermos usar uma versão desfocada B que foi feita com um kernel de desfoque de caixa de 3 × 3, que kernel k poderíamos usar para calcular toda a imagem nítida com uma única correlação? Justifique sua resposta mostrando os cálculos.**
+
+O kernel de desfoque de caixa 3 × 3 é:
+
+    [   
+        [1/9, 1/9, 1/9],
+        [1/9, 1/9, 1/9],
+        [1/9, 1/9, 1/9]
+    ]
+
+Formula de nitidez<br>
+\[ S{x,y} = round(2 * I{x,y} - B{x,y}) \]
+
+
+    Multiplicar a Imagem Original por 2:
+
+    [
+        [ 0,  0,  0],
+        [ 0,  2,  0],
+        [ 0,  0,  0]
+    ]
+
+    Subtrair o Kernel de Desfoque:
+    
+    [
+        [ 0,  0,  0],
+        [ 0,  2,  0],
+        [ 0,  0,  0]
+    ]
+    -
+    [
+        [1/9, 1/9, 1/9],
+        [1/9, 1/9, 1/9],
+        [1/9, 1/9, 1/9]
+    ]
+    =
+    [
+        [-1/9, -1/9, -1/9],
+        [-1/9,  17/9, -1/9],
+        [-1/9, -1/9, -1/9]
+    ]
+
+
+    O kernel de nitidez ( K ) que combina a operação de nitidez com o kernel de desfoque de caixa 3 × 3 é:
+    [
+    [-1/9, -1/9, -1/9],
+    [-1/9,  17/9, -1/9],
+    [-1/9, -1/9, -1/9]
+    ]
+
+Logo subtraímos o kernel de desfoque de caixa de cada elemento, resultando em valores negativos para os elementos adjacentes e um valor central aumentado.
+
+**Quando terminar e seu código passar nos testes relacionados à nitidez, execute seu filtro de nitidez na `imagemtest_images/python.png` usando um kernel de tamanho 11, salve o resultado como uma imagem PNG.**
+
+<img src="./test_images/python.png" alt="Python original" width="200"> 
+=>
+<img src="./test_results/pythonNitido.png" alt="Python Nitida" width="200">
