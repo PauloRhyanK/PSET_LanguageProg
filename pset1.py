@@ -135,7 +135,7 @@ class Imagem:
             [-1,0,1]
         ]
 
-        # Criar Ox, aplicando a imagem ao kerneç Kx
+        # Criar Ox, aplicando a imagem ao kernel Kx
         Ox = self.correlacao(Kx)
         return Ox
     
