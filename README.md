@@ -177,5 +177,40 @@ Logo subtraímos o kernel de desfoque de caixa de cada elemento, resultando em v
 **Quando terminar e seu código passar nos testes relacionados à nitidez, execute seu filtro de nitidez na `imagemtest_images/python.png` usando um kernel de tamanho 11, salve o resultado como uma imagem PNG.**
 
 <img src="./test_images/python.png" alt="Python original" width="200"> 
-=>
 <img src="./test_results/pythonNitido.png" alt="Python Nitida" width="200">
+
+
+## Questão 6:
+**explique o que cada um dos kernels acima,por si só,está fazendo.**
+
+Kernel Kx:
+
+    Kx = 
+    [
+        [-1,0,1],
+        [-2,0,2],
+        [-1,0,1]
+    ]
+
+Kernel Ky:
+
+        Ky = 
+        [
+            [-1,-2,-1],
+            [0,0,0],
+            [1,2,1]
+        ]
+
+<img src="./test_images/construct.png" alt="Imagem Original"  width="150"> 
+<img src="./test_results/constructBordasOx.png" alt="Imagem Ox"  width="150"> 
+<img src="./test_results/constructBordasOy.png" alt="Imagem Oy"  width="150"> 
+
+Podemos ver que o Kernel Kx e Ky quando  aplicados a imagem representam o papel de obter as bordas na horizontal e vertical respctivamente,  ou seja, o Kernel Kx representa a horizontal e o Kernel Ky representa a vertical. Dessa forma ao finalizar a expressão de bordas, teremos a as bordas completas.
+
+
+
+**Quando terminar e seu código passar nos testes de detecção de borda, execute seu detector de borda na imagem test_images/construct.png,salveore sultado como uma imagem PNG**
+
+<img src="./test_results/constructBordas.png" alt="Imagem Oy"  width="150"> 
+
+Aplicação completa do filtro de bordas.

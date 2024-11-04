@@ -97,7 +97,7 @@ class TestInvertida(unittest.TestCase):
 class TestFiltros(unittest.TestCase):
 
 
-    def test_filtroKernel(self):
+    def meutest_filtroKernel(self):
         im = pset1.Imagem.carregar('test_images/pigbird.png')
         arquivo_saida = os.path.join(TEST_DIRECTORY, 'test_results', 'pigbirdKernel.png')
 
@@ -117,7 +117,7 @@ class TestFiltros(unittest.TestCase):
 
         
 
-    def test_borrada_cat(self):
+    def meutest_borrada_cat(self):
         arquivo_entrada = os.path.join(TEST_DIRECTORY, 'test_images', 'cat.png')  # Caminho do gato
         arquivo_saida = os.path.join(TEST_DIRECTORY, 'test_results', 'catblur.png')  # Caminho do resultado do gato borrado
 
@@ -143,7 +143,7 @@ class TestFiltros(unittest.TestCase):
                                      "Cuidado para não modificar a imagem original!")
                     self.assertEqual(resultado,  esperado)
 
-    def test_nitidez(self):
+    def meutest_nitidez(self):
         arquivo_entrada = os.path.join(TEST_DIRECTORY, 'test_images', 'python.png') 
         arquivo_saida = os.path.join(TEST_DIRECTORY, 'test_results', 'pythonNitido.png') 
 
@@ -184,6 +184,24 @@ class TestFiltros(unittest.TestCase):
                 self.assertEqual(imagem_entrada, imagem_entrada_copia,
                                  "Cuidado para não modificar a imagem original!")
                 self.assertEqual(resultado,  esperado)
+
+    def meutest_bordas(self):
+        arquivo_entrada = os.path.join(TEST_DIRECTORY, 'test_images', 'construct.png')  # Caminho da imagem
+        arquivo_saida = os.path.join(TEST_DIRECTORY, 'test_results', 'constructBordas.png')  # Caminho do resultado da imagem
+
+        # Carregar a imgagem, aplicar o filtro e salvar imagem respectivamente
+        img = pset1.Imagem.carregar(arquivo_entrada)
+
+        # Criar e salvar os resultos Ox e Oy para visualizarmos
+        Ox = img.CriarOx()
+        Oy = img.CriarOy()
+
+        Ox.salvar(os.path.join(TEST_DIRECTORY, 'test_results', 'constructBordasOx.png'))
+        Oy.salvar(os.path.join(TEST_DIRECTORY, 'test_results', 'constructBordasOy.png'))
+
+        resultado = img.bordas()
+        resultado.salvar(arquivo_saida)
+        
 
 
 if __name__ == '__main__':

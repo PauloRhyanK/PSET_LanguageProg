@@ -103,9 +103,6 @@ class Imagem:
 
                 # Aqui estamos aplicando o novo valor do pixel na imagem    
                 resultado.set_pixel(x,y, soma)
-
-        
-
         return resultado
     
     def kernel_borrada(self, n):
@@ -130,8 +127,51 @@ class Imagem:
         self.verificar_pixels() # Verificando se o valor dos pixels no de imagens ultrapassa os limites
         return self
 
+    def  CriarOx(self):
+        # Criação do kernel_Kx
+        Kx = [
+            [-1,0,1],
+            [-2,0,2],
+            [-1,0,1]
+        ]
+
+        # Criar Ox, aplicando a imagem ao kerneç Kx
+        Ox = self.correlacao(Kx)
+        return Ox
+    
+    def  CriarOy(self):
+        #Criação do kernel Ky
+        Ky = [
+            [-1,-2,-1],
+            [0,0,0],
+            [1,2,1]
+        ]
+
+        # Criar Oy, aplicando a imagem ao kernel Ky
+        Oy = self.correlacao(Ky)
+        return Oy
+
+
+
     def bordas(self):
-        raise NotImplementedError
+        # Optei por fazer a aplicação do kernel separadamente para conseguir imprimir
+        # a imagem em test.py com mais facilidade, e porque o mostrar() não estava funcionando
+        Ox = self.CriarOx()
+        Oy = self.CriarOy()
+
+        resultado = Imagem.nova(self.largura, self.altura)
+
+        # Aplicando a expreção(raiz da soma de Ox e Oy ao quadrado) em cada pixel
+        for x in range(self.largura):
+            for y in range(self.altura):
+                valorOx = Ox.get_pixel(x,y)
+                valorOy = Oy.get_pixel(x,y)
+
+                novoPixel = round(math.sqrt(valorOx**2 + valorOy**2))
+                resultado.set_pixel(x,y, novoPixel)
+        resultado.verificar_pixels() # Colando pixels no limite
+
+        return resultado
 
     # Abaixo deste ponto estão utilitários para carregar, salvar e mostrar
     # as imagens, bem como para a realização de testes. Você deve ler as funções
